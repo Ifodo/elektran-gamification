@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamification Products</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 60px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #f8fafc;
+            margin-bottom: 60px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #475569;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 45px 30px;
+            text-align: center;
+            min-height: 240px;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: #64748b;
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+        }
+
+        .card-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+        }
+
+        .card:hover .card-title {
+            color: #f1f5f9;
+        }
+
+        .card-description {
+            font-size: 0.95em;
+            color: #cbd5e1;
+            font-weight: 400;
+            line-height: 1.5;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-description {
+            color: #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+                margin-bottom: 40px;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 20px;
+                padding: 15px;
+            }
+
+            .card {
+                min-height: 220px;
+                padding: 35px 20px;
+            }
+
+            .card-icon {
+                font-size: 3em;
+            }
+
+            .card-title {
+                font-size: 1.1em;
+            }
+
+            .card-description {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Gamification Products</h1>
+        
+        <div class="cards-grid">
+            <a href="https://igethouse-crossword.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">📝</div>
+                <div class="card-title">Crossword</div>
+                <div class="card-description">Test your vocabulary with interactive crossword puzzles</div>
+            </a>
+
+            <a href="https://igethouse-image-puzzle.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">🖼️</div>
+                <div class="card-title">Image Puzzle</div>
+                <div class="card-description">Rearrange pieces to complete the beautiful images</div>
+            </a>
+
+            <a href="https://igethouse-spin-win.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">🎡</div>
+                <div class="card-title">Wheel Spin</div>
+                <div class="card-description">Spin the wheel and win amazing prizes and rewards</div>
+            </a>
+
+            <a href="https://sudoku-ochre-phi.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">🔢</div>
+                <div class="card-title">Sudoku</div>
+                <div class="card-description">Challenge your logic with classic number puzzles</div>
+            </a>
+
+            <a href="https://igethouse-search-puzzle.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">🔍</div>
+                <div class="card-title">Word Search Puzzle</div>
+                <div class="card-description">Find hidden words in grids of letters</div>
+            </a>
+
+            <a href="https://mystery-box-tau.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">📦</div>
+                <div class="card-title">Mystery Box</div>
+                <div class="card-description">Unlock mysterious rewards with every surprise box</div>
+            </a>
+
+            <a href="https://quick-assessment-sigma.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Quick Assessment</div>
+                <div class="card-description">Evaluate your knowledge with rapid-fire questions</div>
+            </a>
+
+            <a href="https://deal-stack-sigma.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">🏗️</div>
+                <div class="card-title">Build the Deal Stack</div>
+                <div class="card-description">Stack deals and build your real estate empire</div>
+            </a>
+
+            <a href="https://spot-the-difference-puce.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">👀</div>
+                <div class="card-title">Spot the Difference</div>
+                <div class="card-description">Find the differences between two similar images</div>
+            </a>
+
+            <a href="https://igethouse-builders-guide.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">📖</div>
+                <div class="card-title">Builders Guide</div>
+                <div class="card-description">Learn essential tips and strategies for success</div>
+            </a>
+
+            <a href="https://real-estate-quiz-pi.vercel.app/" class="card" target="_blank" rel="noopener noreferrer">
+                <div class="card-icon">❓</div>
+                <div class="card-title">Quiz</div>
+                <div class="card-description">Test your expertise with challenging quiz questions</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
