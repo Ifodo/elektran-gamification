@@ -1,0 +1,69 @@
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cursor/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary Files
+*.tmp
+*.temp
+.cache/
+
+# User-specific files
+.env
+.env.local
+
+# Node modules (if using any build tools later)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python (if using any Python tools)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# System Files
+*.exe
+*.dll
+*.so
+*.dylib
+NTUSER.DAT*
+ntuser.*
+edb_*.exe
+*.regtrans-ms
+*.blf
+
+# Windows folders
+AppData/
+Application Data/
+Cookies/
+Local Settings/
+My Documents/
+NetHood/
+PrintHood/
+Recent/
+SendTo/
+Start Menu/
+Templates/
+
+# Build outputs (if any)
+dist/
+build/
+*.min.js
+*.min.css

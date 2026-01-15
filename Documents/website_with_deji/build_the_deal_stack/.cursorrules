@@ -1,0 +1,60 @@
+# Build the Deal Stack — Project Rules for Cursor AI
+
+This project is a third‑party, transactional readiness simulator for Nigerian real estate.
+It is NOT a game platform but a **qualification funnel** to identify serious buyers and investors.
+
+Tech Stack:
+- HTML5, CSS3, and vanilla JavaScript (ES6+)
+- No JavaScript frameworks
+- Local Storage for state persistence
+- Three pages: index.html, game.html, result.html
+- Modular JS files: js/data.js, js/state.js, js/rules.js, js/game.js, js/result.js
+
+General Conventions:
+- Use clear and descriptive variable and function names
+- Break large functions into smaller reusable helpers
+- Avoid global variables unless intentionally shared state
+- Wrap Local Storage access in helper functions
+- Keep DOM manipulation minimal and readable
+
+UX & Language Guidance:
+- Use professional, investment‑ready tone
+- Avoid playful or gamification language
+- Terms like “Transaction Readiness Score”, “Required Steps”, “Deal Health”, “Risk Indicators” are preferred
+- Do NOT use words such as “points”, “badges”, “win”, “game”, or “level”
+
+Rules Engine Expectations:
+- The rules engine must:
+  - Confirm presence of mandatory cards
+  - Validate correct sequencing
+  - Apply penalties for wrong order or missing steps
+  - Compute a Transaction Readiness Score (TRS) between 0–100
+- TRS bands:
+  - TRS >= 80 → high readiness
+  - 65 <= TRS < 80 → moderate readiness
+  - TRS < 65 → low readiness
+
+Local Storage State:
+- Session state should be stored as a single object
+- Encapsulate saves and loads
+- Do not store sensitive user data
+- The session must survive page reloads without backend
+
+Drag‑and‑Drop UI:
+- Use HTML5 native drag and drop
+- Prevent duplicate card placement
+- Update risk and time indicators in real time on stack changes
+
+Result Page Logic:
+- Read TRS from Local Storage
+- Render score and explanatory feedback
+- Select appropriate CTA based on TRS band
+- Do not refer to “games” or “scores” in CTA copy
+
+Edge Cases:
+- Empty stack submission must show advisory feedback
+- Mandatory cards missing must trigger inline explanatory dialog
+- Reset functionality must clear Local Storage state and restart
+
+Always follow the above conventions when generating code, fixing bugs, or creating new features.
+

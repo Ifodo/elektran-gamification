@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Build the Deal Stack - Assemble Your Transaction">
+    <title>Assemble Your Deal | Build the Deal Stack</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="game-page">
+    <header class="header">
+        <div class="container">
+            <img src="assets/logo.jpg" alt="IGetHouse Logo" class="logo">
+            <button class="btn btn-secondary btn-sm" id="resetBtn">Start New Deal</button>
+        </div>
+    </header>
+
+    <main class="game-main">
+        <div class="container-fluid">
+            <!-- Deal Brief Header -->
+            <section class="deal-brief-header">
+                <h1 class="deal-title">Property Deal Brief</h1>
+                <div class="deal-details" id="dealDetails">
+                    <!-- Deal details will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Three Column Layout -->
+            <section class="game-workspace">
+                <!-- Left Panel: Card Library -->
+                <aside class="card-library-panel" aria-label="Available transaction steps">
+                    <h2 class="panel-title">Deal Card Library</h2>
+                    <p class="panel-description">Drag cards to build your transaction stack</p>
+                    
+                    <!-- Category Legend -->
+                    <div class="category-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: var(--color-primary);"></span>
+                            <span class="legend-label">Required</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #3b82f6;"></span>
+                            <span class="legend-label">Optional</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: var(--color-secondary);"></span>
+                            <span class="legend-label">Risky</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: var(--color-accent);"></span>
+                            <span class="legend-label">Questionable</span>
+                        </div>
+                    </div>
+                    
+                    <div class="cards-container" id="availableCards">
+                        <!-- Cards will be populated by JavaScript -->
+                    </div>
+                </aside>
+
+                <!-- Center Panel: Stack Slots -->
+                <article class="stack-panel" aria-label="Your deal stack">
+                    <div class="stack-header">
+                        <h2 class="panel-title">Your Deal Stack</h2>
+                        <p class="stack-count" id="stackCount">0 steps</p>
+                    </div>
+                    <div class="stack-container" id="dealStack">
+                        <!-- Stack slots will be populated by JavaScript -->
+                    </div>
+                    <button class="btn btn-primary btn-review" id="validateBtn">Review Deal</button>
+                </article>
+
+                <!-- Right Panel: Deal Indicators -->
+                <aside class="indicators-panel" aria-label="Deal health metrics">
+                    <h2 class="panel-title">Deal Indicators</h2>
+                    
+                    <div class="indicator-card">
+                        <div class="indicator-icon">⏱️</div>
+                        <div class="indicator-content">
+                            <span class="indicator-label">Time Used</span>
+                            <span class="indicator-value" id="timeIndicator">0 / 45 days</span>
+                        </div>
+                    </div>
+
+                    <div class="indicator-card">
+                        <div class="indicator-icon">⚠️</div>
+                        <div class="indicator-content">
+                            <span class="indicator-label">Risk Level</span>
+                            <span class="indicator-value" id="riskIndicator">Low</span>
+                        </div>
+                    </div>
+
+                    <div class="indicator-card">
+                        <div class="indicator-icon">📊</div>
+                        <div class="indicator-content">
+                            <span class="indicator-label">Deal Health</span>
+                            <span class="indicator-value" id="healthIndicator">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="indicator-info">
+                        <h3>Assessment Criteria</h3>
+                        <ul>
+                            <li>Stack completeness</li>
+                            <li>Correct sequencing</li>
+                            <li>Risk management</li>
+                            <li>Time discipline</li>
+                        </ul>
+                    </div>
+                </aside>
+            </section>
+        </div>
+    </main>
+
+    <!-- Universal Modal -->
+    <div class="modal" id="universalModal" role="dialog" aria-labelledby="universalModalTitle" aria-describedby="universalModalMessage">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-icon" id="universalModalIcon">💡</span>
+                <h3 class="modal-title" id="universalModalTitle">Modal Title</h3>
+            </div>
+            <p class="modal-message" id="universalModalMessage">Modal message goes here.</p>
+            <div class="modal-actions" id="universalModalActions">
+                <!-- Buttons will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 IGetHouse / IICOCECE Properties & Investment Ltd.</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/rules.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

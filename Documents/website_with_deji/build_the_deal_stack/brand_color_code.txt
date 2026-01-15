@@ -1,0 +1,7 @@
+Color            Code           RGB
+
+Deep Green:      #025940        2, 89, 64
+Terracotta:      #E2725B        226, 114, 91
+Joyful Orange:   #FFA726        255, 167, 38
+Sand White:      #FAF9F6        250, 249, 246
+Slate Gray:      #5E6666        94, 102, 102

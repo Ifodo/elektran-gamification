@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Build the Deal Stack - Your Transaction Readiness Assessment">
+    <title>Assessment Results | Build the Deal Stack</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="result-page">
+    <header class="header">
+        <div class="container">
+            <img src="assets/logo.jpg" alt="IGetHouse Logo" class="logo">
+        </div>
+    </header>
+
+    <main class="results-main">
+        <div class="container">
+            <!-- Email Gate (shown first) -->
+            <section class="email-gate-section" id="emailGate">
+                <div class="email-gate-card">
+                    <h1>Access Your Assessment Report</h1>
+                    <p class="email-gate-description">
+                        Enter your email address to view your Transaction Readiness Score and 
+                        receive personalized recommendations for your property acquisition journey.
+                    </p>
+                    <form id="emailForm" class="email-form">
+                        <div class="form-group">
+                            <label for="emailInput" class="form-label">Email Address</label>
+                            <input 
+                                type="email" 
+                                id="emailInput" 
+                                class="form-input" 
+                                placeholder="your.email@example.com" 
+                                required
+                                aria-required="true"
+                            >
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit">
+                            View Assessment Results
+                        </button>
+                    </form>
+                    <p class="privacy-note">
+                        Your information is confidential and will be used solely for property advisory purposes.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Results Section (shown after email submission) -->
+            <section class="results-content hidden" id="resultsSection">
+                <!-- Transaction Readiness Score -->
+                <article class="score-section">
+                    <h1 class="results-title">Transaction Readiness Assessment</h1>
+                    
+                    <!-- Scenario Context (NEW) -->
+                    <div id="scenarioContext" class="scenario-context-container hidden"></div>
+                    
+                    <div class="score-display-card">
+                        <div class="score-display">
+                            <span class="score-value" id="scoreValue">--</span>
+                            <span class="score-denominator">/100</span>
+                        </div>
+                        <p class="score-classification" id="scoreBand">--</p>
+                    </div>
+                </article>
+
+                <!-- Performance Breakdown -->
+                <article class="breakdown-section">
+                    <h2 class="section-heading">Assessment Breakdown</h2>
+                    <div class="breakdown-grid" id="breakdownGrid">
+                        <!-- Breakdown items will be populated by JavaScript -->
+                    </div>
+                </article>
+
+                <!-- Strengths and Gaps -->
+                <article class="analysis-section">
+                    <div class="analysis-grid">
+                        <!-- Strengths -->
+                        <div class="analysis-card strengths-card">
+                            <div class="card-header">
+                                <span class="card-icon">✓</span>
+                                <h3 class="card-title">Strengths Identified</h3>
+                            </div>
+                            <ul class="analysis-list" id="strengthsList">
+                                <!-- Populated by JavaScript -->
+                            </ul>
+                        </div>
+
+                        <!-- Gaps -->
+                        <div class="analysis-card gaps-card">
+                            <div class="card-header">
+                                <span class="card-icon">!</span>
+                                <h3 class="card-title">Development Areas</h3>
+                            </div>
+                            <ul class="analysis-list" id="gapsList">
+                                <!-- Populated by JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Next Steps CTA -->
+                <article class="next-steps-section">
+                    <div class="next-steps-card" id="ctaCard">
+                        <!-- CTA content will be populated based on score band -->
+                    </div>
+                </article>
+
+                <!-- Action Buttons -->
+                <div class="results-actions">
+                    <button class="btn btn-primary" id="tryAnotherScenarioBtn">
+                        Try Another Scenario →
+                    </button>
+                    <button class="btn btn-secondary" id="retryBtn">
+                        Start New Deal
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Universal Modal -->
+    <div class="modal" id="universalModal" role="dialog" aria-labelledby="universalModalTitle" aria-describedby="universalModalMessage">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-icon" id="universalModalIcon">💡</span>
+                <h3 class="modal-title" id="universalModalTitle">Modal Title</h3>
+            </div>
+            <p class="modal-message" id="universalModalMessage">Modal message goes here.</p>
+            <div class="modal-actions" id="universalModalActions">
+                <!-- Buttons will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 IGetHouse / IICOCECE Properties & Investment Ltd.</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/rules.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/result.js"></script>
+</body>
+</html>

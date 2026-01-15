@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Build the Deal Stack - Transaction Readiness Simulator for Nigerian Real Estate">
+    <title>Build the Deal Stack | IGetHouse Transaction Readiness Simulator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="landing-page">
+    <header class="header">
+        <div class="container">
+            <img src="assets/logo.jpg" alt="IGetHouse Logo" class="logo">
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="product-title">Build the Deal Stack</h1>
+                <p class="product-subtitle">
+                    Test your ability to structure and sequence Nigerian real estate transactions
+                </p>
+
+                <!-- Scenario Selection Section -->
+                <div class="scenario-selection-section">
+                    <h2 class="section-title">Choose Your Transaction Scenario</h2>
+                    <p class="section-subtitle">
+                        Each scenario represents a different property type with unique challenges and learning outcomes.
+                        Select one to begin your assessment.
+                    </p>
+
+                    <!-- Scenario Cards Grid -->
+                    <div class="scenario-grid" id="scenarioGrid">
+                        <!-- Scenarios will be dynamically loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Universal Modal -->
+    <div class="modal" id="universalModal" role="dialog" aria-labelledby="universalModalTitle" aria-describedby="universalModalMessage">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-icon" id="universalModalIcon">💡</span>
+                <h3 class="modal-title" id="universalModalTitle">Modal Title</h3>
+            </div>
+            <p class="modal-message" id="universalModalMessage">Modal message goes here.</p>
+            <div class="modal-actions" id="universalModalActions">
+                <!-- Buttons will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 IGetHouse / IICOCECE Properties & Investment Ltd. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Load dependencies -->
+    <script src="js/data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/modal.js"></script>
+
+    <script>
+        /**
+         * Scenario Selection and Session Management
+         * 
+         * Features:
+         * - Load and display all scenarios
+         * - Handle scenario selection
+         * - Track completed scenarios
+         * - Manage existing sessions
+         */
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderScenarios();
+        });
+
+        /**
+         * Render all available scenarios
+         */
+        function renderScenarios() {
+            const grid = document.getElementById('scenarioGrid');
+            if (!grid) return;
+
+            const scenarios = ScenarioManager.getAllScenarios();
+            const completedScenarios = StateManager.getCompletedScenarios();
+
+            grid.innerHTML = scenarios.map(scenario => {
+                const isCompleted = completedScenarios[scenario.id];
+                const completedBadge = isCompleted 
+                    ? `<span class="completed-badge">✅ Completed (${isCompleted.bestScore}/100)</span>` 
+                    : '';
+
+                // Difficulty badge
+                const difficultyClass = `difficulty-${scenario.difficulty}`;
+                const difficultyEmoji = scenario.difficulty === 'low' ? '⚡' : 
+                                       scenario.difficulty === 'medium' ? '⚡⚡' : '⚡⚡⚡';
+
+                return `
+                    <div class="scenario-card ${isCompleted ? 'completed' : ''}" 
+                         data-scenario-id="${scenario.id}"
+                         onclick="selectScenario('${scenario.id}')">
+                        <div class="scenario-header">
+                            <span class="scenario-icon">${scenario.icon}</span>
+                            <div class="scenario-header-text">
+                                <h3 class="scenario-title">${scenario.title}</h3>
+                                <div class="scenario-badges">
+                                    <span class="difficulty-badge ${difficultyClass}">
+                                        ${difficultyEmoji} ${scenario.difficultyLabel}
+                                    </span>
+                                    ${scenario.badge ? `<span class="feature-badge">${scenario.badge}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="scenario-details">
+                            <div class="scenario-property-info">
+                                <p class="property-type">${scenario.propertyType}</p>
+                                <p class="property-location">📍 ${scenario.location}</p>
+                            </div>
+                            
+                            <div class="scenario-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Price</span>
+                                    <span class="stat-value">${scenario.priceFormatted}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Timeline</span>
+                                    <span class="stat-value">${scenario.timelineDays} days</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Duration</span>
+                                    <span class="stat-value">${scenario.estimatedDuration}</span>
+                                </div>
+                            </div>
+                            
+                            <p class="scenario-description">${scenario.description}</p>
+                            
+                            ${completedBadge}
+                        </div>
+                        
+                        <div class="scenario-action">
+                            <button class="btn btn-primary btn-scenario">
+                                ${isCompleted ? 'Start Again →' : 'Start This Deal →'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Handle scenario selection
+         */
+        function selectScenario(scenarioId) {
+            // Check if Local Storage is available
+            if (!StateManager.isStorageAvailable()) {
+                ModalManager.alert(
+                    'Local Storage Not Available',
+                    'This application requires Local Storage to save your progress.\n\nPlease enable Local Storage in your browser settings and try again.',
+                    'error'
+                );
+                return;
+            }
+
+            const state = StateManager.load();
+            
+            // Edge Case: Check for existing session
+            if (state) {
+                const currentScenario = state.activeScenarioId;
+                
+                // If user has completed an assessment
+                if (state.completedAt && state.score !== null) {
+                    ModalManager.confirm(
+                        'Start New Assessment?',
+                        `You have a completed assessment${currentScenario ? ' (' + ScenarioManager.getScenarioById(currentScenario)?.title + ')' : ''}.\n\nStarting this scenario will begin a new session.\n\nDo you want to continue?`,
+                        () => {
+                            // User confirmed - start new with selected scenario
+                            console.log('Starting new deal with scenario:', scenarioId);
+                            StateManager.setActiveScenario(scenarioId);
+                            window.location.href = 'game.html';
+                        },
+                        () => {
+                            // User cancelled - view current results
+                            console.log('Redirecting to existing results...');
+                            window.location.href = 'result.html';
+                        },
+                        { confirmText: 'Start New', cancelText: 'View Results', type: 'warning' }
+                    );
+                    return;
+                }
+                
+                // If user has an in-progress session with a different scenario
+                if (currentScenario && currentScenario !== scenarioId && state.dealStack && state.dealStack.length > 0) {
+                    const currentScenarioData = ScenarioManager.getScenarioById(currentScenario);
+                    ModalManager.confirm(
+                        'Switch Scenario?',
+                        `You have ${state.dealStack.length} step${state.dealStack.length !== 1 ? 's' : ''} in progress for "${currentScenarioData?.title || 'another scenario'}".\n\nSwitching scenarios will clear your current progress.\n\nDo you want to continue?`,
+                        () => {
+                            // User confirmed - switch scenario
+                            console.log('Switching to new scenario:', scenarioId);
+                            StateManager.setActiveScenario(scenarioId);
+                            window.location.href = 'game.html';
+                        },
+                        null,
+                        { confirmText: 'Switch Scenario', cancelText: 'Cancel', type: 'warning' }
+                    );
+                    return;
+                }
+                
+                // If user has in-progress session with same scenario
+                if (currentScenario === scenarioId && state.dealStack && state.dealStack.length > 0) {
+                    ModalManager.confirm(
+                        'Continue or Restart?',
+                        `You have ${state.dealStack.length} step${state.dealStack.length !== 1 ? 's' : ''} in progress for this scenario.\n\nClick Continue to resume, or Restart to begin fresh.`,
+                        () => {
+                            // User confirmed - continue
+                            console.log('Continuing previous session...');
+                            window.location.href = 'game.html';
+                        },
+                        () => {
+                            // User cancelled - restart
+                            console.log('Restarting scenario...');
+                            StateManager.setActiveScenario(scenarioId);
+                            window.location.href = 'game.html';
+                        },
+                        { confirmText: 'Continue', cancelText: 'Restart', type: 'info' }
+                    );
+                    return;
+                }
+            }
+            
+            // No conflicts - proceed with selected scenario
+            console.log('Starting scenario:', scenarioId);
+            StateManager.setActiveScenario(scenarioId);
+            window.location.href = 'game.html';
+        }
+
+        // Make selectScenario globally accessible
+        window.selectScenario = selectScenario;
+    </script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build the Deal Stack - Test Runner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #025940;
+            margin-bottom: 1rem;
+        }
+
+        .test-controls {
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #025940;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #013d2e;
+        }
+
+        .btn-secondary {
+            background: #E2725B;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #d15b47;
+        }
+
+        .btn-warning {
+            background: #FFA726;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #ff9800;
+        }
+
+        .test-results {
+            margin-top: 2rem;
+        }
+
+        .test-case {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            border-left: 4px solid #025940;
+        }
+
+        .test-case.pass {
+            border-left-color: #4caf50;
+        }
+
+        .test-case.fail {
+            border-left-color: #f44336;
+        }
+
+        .test-case h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .test-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .detail-label {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #025940;
+        }
+
+        .score-high { color: #4caf50; }
+        .score-moderate { color: #FFA726; }
+        .score-low { color: #f44336; }
+
+        .log-section {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+        }
+
+        .log-success { color: #4caf50; }
+        .log-error { color: #f44336; }
+        .log-info { color: #61afef; }
+        .log-warn { color: #FFA726; }
+
+        .instructions {
+            background: #fff9e6;
+            border: 1px solid #FFA726;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .instructions h3 {
+            color: #FFA726;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions ul {
+            margin-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Build the Deal Stack - Test Runner</h1>
+        <p style="margin-bottom: 1rem; color: #666;">
+            Automated testing for Transaction Readiness Score validation and messaging
+        </p>
+
+        <div class="instructions">
+            <h3>📋 Test Instructions</h3>
+            <ul>
+                <li>Each test will create a specific deal stack scenario</li>
+                <li>The rules engine will validate and score the stack</li>
+                <li>Results will display below with pass/fail criteria</li>
+                <li>Check the console log for detailed validation objects</li>
+                <li>Clear Local Storage button resets all test data</li>
+            </ul>
+        </div>
+
+        <div class="test-controls">
+            <button class="btn btn-primary" onclick="runTest1()">Test 1: Successful Deal</button>
+            <button class="btn btn-primary" onclick="runTest2()">Test 2: Missing Mandatory</button>
+            <button class="btn btn-primary" onclick="runTest3()">Test 3: Wrong Sequence</button>
+            <button class="btn btn-primary" onclick="runTest4()">Test 4: Time Overflow</button>
+            <button class="btn btn-primary" onclick="runTest5()">Test 5: Risky Shortcuts</button>
+            <button class="btn btn-secondary" onclick="runAllTests()">Run All Tests</button>
+            <button class="btn btn-warning" onclick="clearAll()">Clear Local Storage</button>
+        </div>
+
+        <div id="testResults" class="test-results"></div>
+        
+        <div class="log-section" id="logSection"></div>
+    </div>
+
+    <!-- Load dependencies -->
+    <script src="js/data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/rules.js"></script>
+
+    <script>
+        // Logging utilities
+        const logSection = document.getElementById('logSection');
+        
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logSection.appendChild(entry);
+            logSection.scrollTop = logSection.scrollHeight;
+            
+            if (type === 'error') {
+                console.error(message);
+            } else {
+                console.log(message);
+            }
+        }
+
+        function displayTestResult(testName, description, result, expectedBand, actualBand) {
+            const resultsDiv = document.getElementById('testResults');
+            const testCase = document.createElement('div');
+            testCase.className = `test-case ${result.pass ? 'pass' : 'fail'}`;
+            
+            const scoreClass = actualBand === 'high' ? 'score-high' : 
+                              actualBand === 'moderate' ? 'score-moderate' : 'score-low';
+            
+            testCase.innerHTML = `
+                <h3>${result.pass ? '✓' : '✗'} ${testName}</h3>
+                <p style="color: #666; margin-bottom: 1rem;">${description}</p>
+                <div class="test-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Transaction Readiness Score</div>
+                        <div class="detail-value ${scoreClass}">${result.score}/100</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Score Band</div>
+                        <div class="detail-value ${scoreClass}">${actualBand.toUpperCase()}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Expected Band</div>
+                        <div class="detail-value">${expectedBand.toUpperCase()}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Test Result</div>
+                        <div class="detail-value">${result.pass ? 'PASS' : 'FAIL'}</div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <strong>Breakdown:</strong> 
+                    Completeness: ${result.breakdown.completeness.score}/100, 
+                    Sequencing: ${result.breakdown.sequencing.score}/100, 
+                    Risk: ${result.breakdown.riskHandling.score}/100, 
+                    Time: ${result.breakdown.timeDiscipline.score}/100
+                </div>
+                <div style="margin-top: 0.5rem;">
+                    <strong>Strengths:</strong> ${result.strengths.length > 0 ? result.strengths.join('; ') : 'None'}
+                </div>
+                <div style="margin-top: 0.5rem;">
+                    <strong>Gaps:</strong> ${result.gaps.length > 0 ? result.gaps.join('; ') : 'None'}
+                </div>
+            `;
+            
+            resultsDiv.appendChild(testCase);
+        }
+
+        // Test 1: Successful Deal Completion
+        window.runTest1 = function() {
+            log('Starting Test 1: Successful Deal Completion', 'info');
+            
+            const dealStack = [
+                'card_001', // Bank Pre-Approval
+                'card_002', // Property Inspection
+                'card_003', // Land Verification
+                'card_004', // Legal Due Diligence
+                'card_005', // Property Survey
+                'card_006', // Purchase Agreement
+                'card_007', // Initial Deposit
+                'card_008', // Property Insurance
+                'card_009', // Final Payment
+                'card_010'  // Title Registration
+            ];
+            
+            const validationResults = RulesEngine.validateDealStack(dealStack);
+            console.log('Test 1 Results:', validationResults);
+            
+            const expectedBand = 'high';
+            const actualBand = validationResults.scoreBand.level;
+            const pass = validationResults.totalScore >= 80 && actualBand === expectedBand;
+            
+            log(`Test 1 Score: ${validationResults.totalScore}/100 (${actualBand})`, pass ? 'success' : 'error');
+            
+            displayTestResult(
+                'Test 1: Successful Deal Completion',
+                'All mandatory cards in correct sequence, expecting TRS ≥ 80',
+                { ...validationResults, pass },
+                expectedBand,
+                actualBand
+            );
+        };
+
+        // Test 2: Missing Mandatory Cards
+        window.runTest2 = function() {
+            log('Starting Test 2: Missing Mandatory Cards', 'info');
+            
+            const dealStack = [
+                'card_001', // Bank Pre-Approval
+                'card_002', // Property Inspection
+                'card_003', // Land Verification
+                'card_007', // Initial Deposit (missing prerequisite)
+                'card_009'  // Final Payment (missing prerequisites)
+            ];
+            
+            const validationResults = RulesEngine.validateDealStack(dealStack);
+            console.log('Test 2 Results:', validationResults);
+            
+            const expectedBand = 'low';
+            const actualBand = validationResults.scoreBand.level;
+            const pass = validationResults.totalScore < 65 && actualBand === expectedBand;
+            
+            log(`Test 2 Score: ${validationResults.totalScore}/100 (${actualBand})`, pass ? 'success' : 'error');
+            
+            displayTestResult(
+                'Test 2: Missing Mandatory Cards',
+                'Only 5 of 10 mandatory cards, expecting TRS < 65',
+                { ...validationResults, pass },
+                expectedBand,
+                actualBand
+            );
+        };
+
+        // Test 3: Incorrect Sequencing
+        window.runTest3 = function() {
+            log('Starting Test 3: Incorrect Sequencing', 'info');
+            
+            const dealStack = [
+                'card_010', // Title Registration (requires card_009)
+                'card_009', // Final Payment (requires card_007, card_008)
+                'card_007', // Initial Deposit (requires card_006)
+                'card_006', // Purchase Agreement (requires card_004)
+                'card_004', // Legal Due Diligence (requires card_003)
+                'card_005', // Property Survey (requires card_003)
+                'card_003', // Land Verification
+                'card_008', // Property Insurance (requires card_001)
+                'card_002', // Property Inspection
+                'card_001'  // Bank Pre-Approval
+            ];
+            
+            const validationResults = RulesEngine.validateDealStack(dealStack);
+            console.log('Test 3 Results:', validationResults);
+            
+            const expectedBand = 'moderate';
+            const actualBand = validationResults.scoreBand.level;
+            const pass = validationResults.totalScore >= 65 && validationResults.totalScore < 80 
+                        && validationResults.breakdown.sequencing.score < 60;
+            
+            log(`Test 3 Score: ${validationResults.totalScore}/100 (${actualBand})`, pass ? 'success' : 'error');
+            
+            displayTestResult(
+                'Test 3: Incorrect Sequencing',
+                'All cards present but wrong order, expecting moderate TRS with low sequencing score',
+                { ...validationResults, pass },
+                expectedBand,
+                actualBand
+            );
+        };
+
+        // Test 4: Time Overflow
+        window.runTest4 = function() {
+            log('Starting Test 4: Time Overflow', 'info');
+            
+            const dealStack = [
+                'card_001', 'card_002', 'card_003', 'card_004', 'card_005',
+                'card_006', 'card_007', 'card_008', 'card_009', 'card_010',
+                'card_011', 'card_012', 'card_013', 'card_014', // All optional
+                'card_019', 'card_020', 'card_021', 'card_022'  // All red herrings
+            ];
+            
+            const validationResults = RulesEngine.validateDealStack(dealStack);
+            console.log('Test 4 Results:', validationResults);
+            
+            const expectedBand = 'moderate';
+            const actualBand = validationResults.scoreBand.level;
+            const pass = validationResults.breakdown.timeDiscipline.score < 60 
+                        && validationResults.breakdown.riskHandling.score < 70;
+            
+            log(`Test 4 Score: ${validationResults.totalScore}/100 (${actualBand})`, pass ? 'success' : 'error');
+            
+            displayTestResult(
+                'Test 4: Time Overflow',
+                'All cards including red herrings, expecting poor time and risk scores',
+                { ...validationResults, pass },
+                expectedBand,
+                actualBand
+            );
+        };
+
+        // Test 5: Risky Shortcuts
+        window.runTest5 = function() {
+            log('Starting Test 5: Risky Shortcuts', 'info');
+            
+            const dealStack = [
+                'card_001', // Bank Pre-Approval
+                'card_002', // Property Inspection
+                'card_015', // Skip Land Verification (penalty: 35)
+                'card_017', // Skip Legal Due Diligence (penalty: 40)
+                'card_018', // Verbal Agreement Only (penalty: 30)
+                'card_007', // Initial Deposit
+                'card_009'  // Final Payment
+            ];
+            
+            const validationResults = RulesEngine.validateDealStack(dealStack);
+            console.log('Test 5 Results:', validationResults);
+            
+            const expectedBand = 'low';
+            const actualBand = validationResults.scoreBand.level;
+            const pass = validationResults.breakdown.riskHandling.score < 20 
+                        && validationResults.totalScore < 65;
+            
+            log(`Test 5 Score: ${validationResults.totalScore}/100 (${actualBand})`, pass ? 'success' : 'error');
+            
+            displayTestResult(
+                'Test 5: Risky Shortcuts',
+                'Multiple risky cards taken, expecting very low risk handling score',
+                { ...validationResults, pass },
+                expectedBand,
+                actualBand
+            );
+        };
+
+        // Run All Tests
+        window.runAllTests = function() {
+            document.getElementById('testResults').innerHTML = '';
+            logSection.innerHTML = '';
+            log('Running all tests...', 'info');
+            
+            setTimeout(() => runTest1(), 100);
+            setTimeout(() => runTest2(), 200);
+            setTimeout(() => runTest3(), 300);
+            setTimeout(() => runTest4(), 400);
+            setTimeout(() => runTest5(), 500);
+            setTimeout(() => log('All tests completed!', 'success'), 600);
+        };
+
+        // Clear All
+        window.clearAll = function() {
+            localStorage.clear();
+            document.getElementById('testResults').innerHTML = '';
+            logSection.innerHTML = '';
+            log('Local Storage cleared', 'warn');
+        };
+
+        log('Test runner initialized. Click a button to start testing.', 'success');
+    </script>
+</body>
+</html>
